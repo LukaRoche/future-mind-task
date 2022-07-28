@@ -1,0 +1,59 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.6.1 (swiftlang-5.6.0.323.66 clang-1316.0.20.12)
+// swift-module-flags: -target arm64-apple-ios13.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name RewardsAPI
+import Combine
+import Foundation
+@_exported import RewardsAPI
+import Swift
+import UIKit.UIImage
+import UIKit
+import _Concurrency
+public enum HttpError : Foundation.LocalizedError {
+  case badRequest
+  case resourceNotFound
+  case serverUnavailable
+  public var errorDescription: Swift.String? {
+    get
+  }
+  public static func == (a: RewardsAPI.HttpError, b: RewardsAPI.HttpError) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension RewardsAPI.HttpError : Swift.CaseIterable {
+  public typealias AllCases = [RewardsAPI.HttpError]
+  public static var allCases: [RewardsAPI.HttpError] {
+    get
+  }
+}
+public struct RewardEntity {
+  public let id: Swift.String
+  public let name: Swift.String
+  public let coverURL: Foundation.URL
+  public let pointsCost: Swift.Int
+  public init(id: Swift.String, name: Swift.String, coverURL: Foundation.URL, pointsCost: Swift.Int)
+}
+extension RewardsAPI.RewardEntity : Swift.Equatable {
+  public static func == (a: RewardsAPI.RewardEntity, b: RewardsAPI.RewardEntity) -> Swift.Bool
+}
+@_hasMissingDesignatedInitializers final public class API {
+  public static let shared: RewardsAPI.API
+  final public func loadRewards() -> Combine.AnyPublisher<[RewardsAPI.RewardEntity], Swift.Error>
+  final public func loadImage(for coverURL: Foundation.URL) -> Combine.AnyPublisher<UIKit.UIImage, Swift.Error>
+  final public func loadAvailablePoints() -> Combine.AnyPublisher<Swift.UInt, Swift.Error>
+  final public func loadCustomer() -> Combine.AnyPublisher<RewardsAPI.CustomerEntity, Swift.Error>
+  final public func activateReward(with id: Swift.String) -> Combine.AnyPublisher<Swift.Void, Swift.Error>
+  final public func deactivateReward(with id: Swift.String) -> Combine.AnyPublisher<Swift.Void, Swift.Error>
+  final public func getActiveRewardIdentifiers() -> Combine.AnyPublisher<[Swift.String], Swift.Error>
+  @objc deinit
+}
+public struct CustomerEntity {
+  public let name: Swift.String
+  public init(name: Swift.String)
+}
+extension RewardsAPI.CustomerEntity : Swift.Equatable {
+  public static func == (a: RewardsAPI.CustomerEntity, b: RewardsAPI.CustomerEntity) -> Swift.Bool
+}
+extension RewardsAPI.HttpError : Swift.Equatable {}
+extension RewardsAPI.HttpError : Swift.Hashable {}
