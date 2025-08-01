@@ -13,7 +13,5 @@ protocol DashboardViewModelProtocol: AnyObject {
     var error: AnyPublisher<Error, Never> { get }
     
     func fetchData()
-    func activateReward(id: String)
-    func deactivateReward(id: String)
     func handleRewardAction(for rewardId: String)
 }
