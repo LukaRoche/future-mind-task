@@ -3,18 +3,134 @@
 //
 
 import Combine
+import RewardsAPI
+import Foundation
 
 final class DashboardViewModel {
     @Published private var customerNamePublisher: String = ""
-    @Published private var availablePointsPublisher: UInt = 0
+    @Published private var availablePointsPublisher: Int = 0
+    @Published private var rewardsPublisher: [RewardViewModel] = []
+    @Published private var isLoadingPublisher: Bool = false
+    @Published private var errorPublisher: Error? = nil
+    private var activeRewardCancellable: AnyCancellable?
+    private var deactivateRewardCancellable: AnyCancellable?
+    
+    private var cancellables: Set<AnyCancellable> = []
 }
 
 extension DashboardViewModel: DashboardViewModelProtocol {
     var customerName: AnyPublisher<String, Never> {
         return $customerNamePublisher.eraseToAnyPublisher()
     }
-
-    var points: AnyPublisher<UInt, Never> {
+    
+    var points: AnyPublisher<Int, Never> {
         return $availablePointsPublisher.eraseToAnyPublisher()
     }
-}
+    
+    var rewards: AnyPublisher<[RewardViewModel], Never> {
+        return $rewardsPublisher.eraseToAnyPublisher()
+    }
+    
+    var isLoading: AnyPublisher<Bool, Never> {
+        return $isLoadingPublisher.eraseToAnyPublisher()
+    }
+    
+    var error: AnyPublisher<Error, Never> {
+        return $errorPublisher.compactMap { $0 }.eraseToAnyPublisher()
+    }
+    
+    func fetchData() {
+            guard !isLoadingPublisher else { return }
+            isLoadingPublisher = true
+            
+            activeRewardCancellable?.cancel()
+            deactivateRewardCancellable?.cancel()
+            
+            let customerPublisher = API.shared.loadCustomer()
+            let pointsPublisher = API.shared.loadAvailablePoints()
+            let rewardsPublisher = API.shared.loadRewards()
+            let activeRewardsPublisher = API.shared.getActiveRewardIdentifiers()
+            
+            Publishers.Zip4(customerPublisher, pointsPublisher, rewardsPublisher, activeRewardsPublisher)
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] completion in
+                    self?.isLoadingPublisher = false
+                    if case let .failure(error) = completion {
+                        self?.errorPublisher = error
+                    }
+                } receiveValue: { [weak self] (customer, points, rewards, activeRewardIds) in
+                    guard let self = self else { return }
+                    
+                    self.customerNamePublisher = customer.name
+                    self.availablePointsPublisher = Int(points)
+                    
+                    self.rewardsPublisher = rewards.map { reward in
+                        let isActive = activeRewardIds.contains(reward.id)
+                        
+                        let state: CardState
+                        if isActive {
+                            state = .active
+                        } else if Int(points) >= reward.pointsCost {
+                            state = .unlocked
+                        } else {
+                            state = .locked
+                        }
+                        
+                        return RewardViewModel(
+                            id: reward.id,
+                            name: reward.name,
+                            cost: reward.pointsCost,
+                            imageUrl: reward.coverURL,
+                            state: state
+                        )
+                    }
+                }
+                .store(in: &cancellables)
+        }
+        
+        func activateReward(id: String) {
+            guard !isLoadingPublisher else { return }
+            isLoadingPublisher = true
+            
+            activeRewardCancellable?.cancel()
+            
+            activeRewardCancellable = API.shared.activateReward(with: id)
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] completion in
+                    self?.isLoadingPublisher = false
+                    if case let .failure(error) = completion {
+                        self?.errorPublisher = error
+                    } else {
+                        self?.fetchData()
+                    }
+                } receiveValue: { _ in }
+        }
+        
+        func deactivateReward(id: String) {
+            guard !isLoadingPublisher else { return }
+            isLoadingPublisher = true
+            
+            deactivateRewardCancellable?.cancel()
+            
+            deactivateRewardCancellable = API.shared.deactivateReward(with: id)
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] completion in
+                    self?.isLoadingPublisher = false
+                    if case let .failure(error) = completion {
+                        self?.errorPublisher = error
+                    } else {
+                        self?.fetchData()
+                    }
+                } receiveValue: { _ in }
+        }
+        
+        func handleRewardAction(for rewardId: String) {
+            if let reward = rewardsPublisher.first(where: { $0.id == rewardId }) {
+                if reward.state == .active {
+                    deactivateReward(id: rewardId)
+                } else if reward.state == .unlocked {
+                    activateReward(id: rewardId)
+                }
+            }
+        }
+    }

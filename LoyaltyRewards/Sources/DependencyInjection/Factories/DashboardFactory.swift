@@ -11,7 +11,8 @@ final class DashboardFactory: DashboardProducing {
         
         return DashboardViewController(
             view: view,
-            viewModel: viewModel
+            viewModel: viewModel,
+            dashboardFactory: self
         )
     }
     

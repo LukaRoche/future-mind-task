@@ -63,6 +63,8 @@
 		9690554827FD6FB7000F5DFC /* RefreshControlDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9690554727FD6FB7000F5DFC /* RefreshControlDecorator.swift */; };
 		9690555B27FF20BB000F5DFC /* NavigationBarDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9690555A27FF20BB000F5DFC /* NavigationBarDecorator.swift */; };
 		96BDB43A27DF7295005C045B /* UIControl.State+Hashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96BDB43927DF7295005C045B /* UIControl.State+Hashable.swift */; };
+		FA9395C02E3C586500C8F960 /* RewardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9395BF2E3C586500C8F960 /* RewardViewModel.swift */; };
+		FA9395C22E3C5A7200C8F960 /* CardViewDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9395C12E3C5A7200C8F960 /* CardViewDecorator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -151,6 +153,8 @@
 		96BDB43927DF7295005C045B /* UIControl.State+Hashable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl.State+Hashable.swift"; sourceTree = "<group>"; };
 		A9043AEA6AF9ED839FE80222 /* Pods-LoyaltyRewards.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LoyaltyRewards.release.xcconfig"; path = "Target Support Files/Pods-LoyaltyRewards/Pods-LoyaltyRewards.release.xcconfig"; sourceTree = "<group>"; };
 		F3BC3F16ABD42CDD8BCA8A52 /* Pods-LoyaltyRewards-LoyaltyRewardsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LoyaltyRewards-LoyaltyRewardsTests.debug.xcconfig"; path = "Target Support Files/Pods-LoyaltyRewards-LoyaltyRewardsTests/Pods-LoyaltyRewards-LoyaltyRewardsTests.debug.xcconfig"; sourceTree = "<group>"; };
+		FA9395BF2E3C586500C8F960 /* RewardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardViewModel.swift; sourceTree = "<group>"; };
+		FA9395C12E3C5A7200C8F960 /* CardViewDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewDecorator.swift; sourceTree = "<group>"; };
 		FC3D6C4D159C7A48CA10899C /* Pods-LoyaltyRewards-LoyaltyRewardsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LoyaltyRewards-LoyaltyRewardsTests.release.xcconfig"; path = "Target Support Files/Pods-LoyaltyRewards-LoyaltyRewardsTests/Pods-LoyaltyRewards-LoyaltyRewardsTests.release.xcconfig"; sourceTree = "<group>"; };
 		FD2AF7B72E57B20108F2D95A /* Pods_LoyaltyRewards_LoyaltyRewardsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LoyaltyRewards_LoyaltyRewardsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -293,6 +297,7 @@
 			children = (
 				962F401E27DB83BB00AAC3AD /* DashboardViewModelProtocol.swift */,
 				962F402027DB83D500AAC3AD /* DashboardViewModel.swift */,
+				FA9395BF2E3C586500C8F960 /* RewardViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -453,6 +458,7 @@
 				964A30E227F5F60E00139F3A /* ActiveCardDecorator.swift */,
 				9690554427FC617D000F5DFC /* LockedCardDecorator.swift */,
 				9690554227FC6112000F5DFC /* UnlockedCardDecorator.swift */,
+				FA9395C12E3C5A7200C8F960 /* CardViewDecorator.swift */,
 			);
 			path = Decorators;
 			sourceTree = "<group>";
@@ -727,6 +733,7 @@
 				964A30E527F5F79700139F3A /* ActiveButtonDecorator.swift in Sources */,
 				96BDB43A27DF7295005C045B /* UIControl.State+Hashable.swift in Sources */,
 				9690552127FB711C000F5DFC /* LockedButtonDecorator.swift in Sources */,
+				FA9395C22E3C5A7200C8F960 /* CardViewDecorator.swift in Sources */,
 				962F404127DBAD3C00AAC3AD /* SectionTitleView.swift in Sources */,
 				9690554327FC6112000F5DFC /* UnlockedCardDecorator.swift in Sources */,
 				962F406827DDEF8200AAC3AD /* Localized.swift in Sources */,
@@ -766,6 +773,7 @@
 				965048C527EE126C0030AFB1 /* CardView.swift in Sources */,
 				9690552327FB7337000F5DFC /* UnlockedButtonDecorator.swift in Sources */,
 				962F403527DBA76E00AAC3AD /* DashboardFactory.swift in Sources */,
+				FA9395C02E3C586500C8F960 /* RewardViewModel.swift in Sources */,
 				962F401927DB82D800AAC3AD /* DashboardViewController.swift in Sources */,
 				962F405527DBD13700AAC3AD /* CounterLoop.swift in Sources */,
 				962F404F27DBB2D000AAC3AD /* SectionTitlePrimaryDecorator.swift in Sources */,

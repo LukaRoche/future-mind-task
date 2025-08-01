@@ -3,6 +3,8 @@
 //
 
 import UIKit
+import Combine
+import RewardsAPI
 
 final class CardView: UIView {
     private enum Constants {
@@ -14,8 +16,19 @@ final class CardView: UIView {
     private let imageView = UIImageView()
     private let imageOverlayView = UIView()
     private let titleLabel = UILabel()
-
+    private var cancellables = Set<AnyCancellable>()
+    
     let button = Button()
+
+    var buttonTitle: String? {
+        didSet {
+            button.text = buttonTitle
+        }
+    }
+    
+    var viewModel: RewardViewModel?
+    
+    var onTap: (() -> Void)? // Nowy closure do obsługi kliknięć
 
     var image: UIImage? {
         get {
@@ -64,10 +77,32 @@ final class CardView: UIView {
 
         imageOverlayColor = .clear
         setupView()
+        
+        button.addTarget(self, action: #selector(handleTap), for: .touchUpInside)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    @objc private func handleTap() {
+        onTap?()
+    }
+    
+    func loadImage(from url: URL?) {
+        cancellables.forEach { $0.cancel() }
+        cancellables.removeAll()
+
+        guard let url = url else {
+            imageView.image = nil
+            return
+        }
+
+        API.shared.loadImage(for: url)
+            .replaceError(with: UIImage())
+            .map { $0 }
+            .assign(to: \.image, on: imageView)
+            .store(in: &cancellables)
     }
 }
 
@@ -136,6 +171,12 @@ extension CardView {
         titleLabel.numberOfLines = 2
         titleLabel.textAlignment = .center
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            titleLabel.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: Margin.default),
+            titleLabel.trailingAnchor.constraint(equalTo: mainStackView.trailingAnchor, constant: -Margin.default),
+            titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: Margin.default),
+            titleLabel.bottomAnchor.constraint(equalTo: button.topAnchor, constant: -Margin.default)
+        ])
     }
 
     private func prepareButton() {
@@ -145,4 +186,5 @@ extension CardView {
             button.widthAnchor.constraint(equalToConstant: Constants.buttonWidth)
         ])
     }
+    
 }

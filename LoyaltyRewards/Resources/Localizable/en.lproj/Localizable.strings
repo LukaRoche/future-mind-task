@@ -9,3 +9,5 @@
 
 "error-alert-title" = "Something went wrong";
 "error-alert-close-button-title" = "Ok";
+
+"card-points-button" = "%@ points";

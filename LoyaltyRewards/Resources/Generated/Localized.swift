@@ -10,6 +10,10 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum Localized {
+  /// %@ points
+  internal static func cardPointsButton(_ p1: Any) -> String {
+    return Localized.tr("Localizable", "card-points-button", String(describing: p1))
+  }
   /// Share invite code
   internal static let dashboardBottomBannerButtonTitle = Localized.tr("Localizable", "dashboard-bottom-banner-button-title")
   /// Share our app with others and get extra points!
